@@ -19,7 +19,6 @@ def update_git():
         output =  proc.stdout.read().decode("utf-8")
         print(output)
 
-    # Give the option to either reboot or quit the window
     # Keine Änderungen
     if "Already up-to-date." in output:
         button = tk.Button(frame,
