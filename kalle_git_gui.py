@@ -1,7 +1,10 @@
-# assuming Python3
+#! /usr/bin/env python3
 import tkinter as tk
 from tkinter import *
 import subprocess as sub
+import os
+
+os.chdir("/home/pi/scripts/altstadt_projection")
 
 # TODO set permissions for reboot
 #  http://www.ridgesolutions.ie/index.php/2013/02/22/raspberry-pi-restart-shutdown-your-pi-from-python-code/
@@ -52,9 +55,9 @@ def update_git():
     root.mainloop()
 
 
-WINDOW_SIZE = "800x600"
+WINDOW_SIZE = "500x200"
 
-root = tk.Tk()
+root = tk.Tk(className="Projection - update")
 root.geometry(WINDOW_SIZE)
 
 frame = tk.Frame(root)
