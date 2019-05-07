@@ -60,7 +60,7 @@ while True:
 	for block in range(56):	
 		for i in points[block*28:block*28+28]:
 			pixels[i] =(0,0,0)
-			paint(i,50,50,50)
+			paint(i,0,0,0)
 		pixels.show()
 		
 	time.sleep(2)
