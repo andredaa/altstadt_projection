@@ -23,13 +23,13 @@ def update_git():
         print(output)
 
     # Keine Änderungen
-    if "Already up-to-date." in output:
+    if "Bereits aktuell" in output:
         button = tk.Button(frame,
                            text="Keine Updates verfuegbar, Fenster schliessen",
                            fg="black",
                            command=quit)
     # erfolgreich aktualisiert
-    elif "Updating" in output:
+    elif "Aktualisiere" in output:
         button = tk.Button(frame,
                            text="Updates empfangen! Jetzt neu starten",
                            fg="green",
