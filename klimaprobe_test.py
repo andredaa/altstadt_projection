@@ -50,8 +50,8 @@ while True:
 	random.shuffle(points)	
 	for block in range(56):	
 		for i in points[block*28:block*28+28]:
-			pixels[i]=(i%255,255-i%255,0)
-			paint(i,i%255,255-i%255,0)
+			pixels[i]=(i%255,0,255-i%255)
+			paint(i,i%255,0, 255-i%255)
 		pixels.show()
 
 	time.sleep(2)
