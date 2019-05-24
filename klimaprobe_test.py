@@ -1,4 +1,5 @@
 # Testprogramm klimaprobe on Raspberry Pi
+# Version 0.4
 
 import sys
 import time
@@ -10,9 +11,10 @@ import colorsys
 
 #initialisiere Leinwand
 pygame.init()
-screen=pygame.display.set_mode((1024, 768),pygame.FULLSCREEN) #prod-mode
+screen=pygame.display.set_mode((1024, 768),pygame.FULLSCREEN)
 screen.fill((0,0,0))
 pygame.display.update()
+pygame.mouse.set_visible(False)
 
 # Choose an open pin connected to the Data In of the NeoPixel strip, i.e. board.D18
 # NeoPixels must be connected to D10, D12, D18 or D21 to work.
@@ -28,8 +30,8 @@ ORDER = neopixel.GRB
 pixels = neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.5, auto_write=False,
                            pixel_order=ORDER)
 
-# draw all rectangles on pygame screen	
-def show_matrix():
+# draw rectangles from pixels	
+def show_matrix1():
 	rh=12 # rectangle height
 	rw=42 # rectangle width
 	pix=-1
@@ -42,7 +44,25 @@ def show_matrix():
 			pygame.draw.rect(screen, pixels[pix] ,(x*2*rw+rw+10, 734-(y*rh), rw, rh))		
 	pygame.display.update()
 
-# Event Abfragen und alles anzeigen
+# draw (hexa) polygons from pixels	
+def show_matrix():
+	pix=-1
+	for x in range(12):
+		for y in range(60):
+			pix+=1
+			posx=x*2*42+10
+			posy=740-(y*12)
+			plist=[(posx,posy),(posx+6,posy-6),(posx+36,posy-6),(posx+42,posy),(posx+36,posy+6),(posx+6,posy+6)]
+			pygame.draw.polygon(screen, pixels[pix], plist)
+		for y in range(59):
+			pix+=1
+			posx=x*2*42+42+10
+			posy=734-(y*12)
+			plist=[(posx,posy),(posx+6,posy-6),(posx+36,posy-6),(posx+42,posy),(posx+36,posy+6),(posx+6,posy+6)]
+			pygame.draw.polygon(screen, pixels[pix], plist)					
+	pygame.display.update()
+	
+# read events and draw all
 def show_all():
 	# check for events
 	for event in pygame.event.get():
@@ -55,13 +75,13 @@ def show_all():
 	pixels.show()
 	show_matrix()
 
-#rotieren im Pixelbuffer
+# rotate Pixel
 def pxrot(n):
 	n*=3
 	pixels.buf = pixels.buf[-n:] + pixels.buf[:-n]
 	return
 
-#verschieben im Pixelbuffer
+# shift Pixel
 def pxshift(n):
 	n*=3
 	if n==0:
@@ -72,7 +92,7 @@ def pxshift(n):
 		pixels.buf = pixels.buf[-n:] + bytearray(-n)
 	return
 
-#erstelle Farbpalette
+# create colors
 mycolors=[]
 step=1.0/714
 cpoint=0.0
@@ -81,12 +101,12 @@ for x in range(714):
 	cpoint=cpoint+step
 
 # Indizes der 24 unteren LED	
-unten=(0  , 60,119,179,238,298,357,417,476,536,595,655,
+unten = (0  , 60,119,179,238,298,357,417,476,536,595,655,
 	   714,774,833,893,952,1012,1071,1131,1190,1250,1309,1369)
 
-# Schleife der Darstellung
+# mainloop
 while True:
-	#Regenbogen
+	#rainbow
 	print(len(pixels.buf))
 	for i in range(714):
 		pixels[i]=(mycolors[i*3],mycolors[i*3+1],mycolors[i*3+2])
@@ -114,7 +134,7 @@ while True:
 	pixels.fill((0,0,0))
 	pixels.brightness=0.5
 	
-	#weisser Ring
+	#white ring
 	pixels.fill((0,0,0))
 	for i in unten:
 		pixels[i]=(150,150,150)
@@ -127,8 +147,8 @@ while True:
 		show_all() 
 	pixels.fill((0,0,0))	
 	  
-	#Schlangen
-	# Bewegung: -59 links oben, 60 rechts oben, 59 rechts unten, -60 links unten	   
+	#snakes
+	# movement: -59 links oben, 60 rechts oben, 59 rechts unten, -60 links unten	   
 	for m in range(4):
 		for n in range(9):
 			col=random.randint(0,714)
